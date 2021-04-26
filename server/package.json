@@ -1,0 +1,15 @@
+{
+  "name": "ethermarket-server",
+  "version": "1.0.0",
+  "description": "Backend for ethermarket capstone project by Jacob Hildebrandt",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Jacob Hildebrandt",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
