@@ -1,9 +1,30 @@
 const Listing = require("./../models/listingModel");
 const express = require("express");
+const { query } = require("express");
 
 exports.getAllListings = async (req, res) => {
   try {
-    const listings = await Listing.find();
+    console.log(req.query);
+
+    // BUILD QUERY
+    // 1) Filtering
+    const queryObj = { ...req.query };
+    const excludedFields = ["page", "sort", "limit", "fields"];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    // 2) Advanced Filtering
+    let queryStr = JSON.stringify(queryObj);
+
+    // Add '$' to front of operators so mongoose can use these as filter parameters.
+    // gte, gt, lte, lt
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    const query = Listing.find(JSON.parse(queryStr));
+
+    // EXECUTE QUERY
+    const listings = await query;
+
+    // SEND RESONSE
     res.status(200).json({
       status: "success",
       results: listings.length,

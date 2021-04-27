@@ -5,7 +5,7 @@ const listingSchema = new mongoose.Schema({
   posted: { type: Boolean, default: false },
   sold: { type: Boolean, default: false },
   title: { type: String, required: [true, "A listing must have a title"] },
-  listPrice: {
+  price: {
     type: Number,
     required: [true, "A listing must have a list price"],
   },
