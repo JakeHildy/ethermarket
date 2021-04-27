@@ -11,6 +11,7 @@ router
 router
   .route("/:id")
   .get(listingController.getListing)
-  .patch(listingController.updateListing);
+  .patch(listingController.updateListing)
+  .delete(listingController.deleteListing);
 
 module.exports = router;

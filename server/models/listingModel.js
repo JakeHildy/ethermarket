@@ -22,6 +22,7 @@ const listingSchema = new mongoose.Schema({
   },
   images: [{ url: String }],
   followers: [String],
+  createdAt: { type: Date, default: Date.now() },
 });
 
 const Listing = mongoose.model("Listing", listingSchema);
