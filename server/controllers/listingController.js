@@ -2,6 +2,13 @@ const Listing = require("./../models/listingModel");
 const express = require("express");
 const { query } = require("express");
 
+exports.aliasRecentSix = (req, _res, next) => {
+  req.query.limit = "6";
+  req.query.sort = "createdAt";
+  req.query.fields = "createdAt,title,price,images";
+  next();
+};
+
 exports.getAllListings = async (req, res) => {
   try {
     console.log(req.query);
