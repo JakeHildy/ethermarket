@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const faker = require("faker");
+const randomHelpers = require("./../utils/randomHelpers");
 const { v4: uuidv4 } = require("uuid");
 const Listing = require("./../models/ListingModel");
 dotenv.config({ path: ".env" });
 
+////////////////////////////////////////
+// CONNECT TO DATABASE
 const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
@@ -19,48 +22,8 @@ mongoose
   })
   .then(() => console.log("DB connection successful!"));
 
+////////////////////////////////////////
 // CREATE FAKE INFORMATION
-const getRandomCurrency = () => {
-  const currencies = ["ETH", "BTC", "ZCASH"];
-  const randIndex = Math.floor(Math.random() * currencies.length);
-  return currencies[randIndex];
-};
-const getRandomCategory = () => {
-  const categories = [
-    "Home & Garden",
-    "Clothing & Accessories",
-    "Electronics",
-    "Hobbies",
-    "Entertainment",
-    "Sporting Goods",
-  ];
-  const randIndex = Math.floor(Math.random() * categories.length);
-  return categories[randIndex];
-};
-const getRandomCondition = () => {
-  const conditions = ["Brand New", "New", "Lightly Used", "Used", "Worn"];
-  const randIndex = Math.floor(Math.random() * conditions.length);
-  return conditions[randIndex];
-};
-
-const getRandomImages = () => {
-  const images = [];
-  const randNum = Math.ceil(Math.random() * 6);
-  for (let i = 0; i < randNum; i++) {
-    images.push({ url: faker.image.image() });
-  }
-  return images;
-};
-
-const getRandomFollowerIds = () => {
-  const ids = [];
-  const randNum = Math.ceil(Math.random() * 6);
-  for (let i = 0; i < randNum; i++) {
-    ids.push(uuidv4());
-  }
-  return ids;
-};
-
 const listings = [];
 for (let i = 0; i < process.argv[3]; i++) {
   const listing = {
@@ -69,20 +32,21 @@ for (let i = 0; i < process.argv[3]; i++) {
     sold: false,
     title: faker.vehicle.vehicle(),
     price: Math.random() * 20,
-    listCurrency: getRandomCurrency(),
-    category: getRandomCategory(),
-    condition: getRandomCondition(),
+    listCurrency: randomHelpers.getRandomCurrency(),
+    category: randomHelpers.getRandomCategory(),
+    condition: randomHelpers.getRandomCondition(),
     location: {
       lat: faker.address.latitude(),
       long: faker.address.longitude(),
     },
     description: faker.lorem.paragraph(),
-    images: getRandomImages(),
-    followers: getRandomFollowerIds(),
+    images: randomHelpers.getRandomImages(),
+    followers: randomHelpers.getRandomFollowerIds(),
   };
   listings.push(listing);
 }
 
+////////////////////////////////////////
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
@@ -94,6 +58,7 @@ const importData = async () => {
   process.exit();
 };
 
+////////////////////////////////////////
 // DELETE ALL LISTING DATA FROM DB
 const deleteData = async () => {
   try {
@@ -105,6 +70,8 @@ const deleteData = async () => {
   process.exit();
 };
 
+////////////////////////////////////////
+// RUN SPECIFIC FUNCTIONS BASED ON PROCESS VARS.
 if (process.argv[2] === "--import") {
   importData();
 } else if (process.argv[2] === "--delete") {
