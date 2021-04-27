@@ -27,3 +27,12 @@ exports.createListing = async (req, res) => {
     res.status(400).json({ status: "fail", message: "Invalid data sent!" });
   }
 };
+
+exports.getListing = async (req, res) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+    res.status(200).json({ status: "success", data: { listing } });
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: "Failed to get Listing" });
+  }
+};
