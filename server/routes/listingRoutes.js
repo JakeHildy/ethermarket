@@ -8,6 +8,9 @@ router
   .get(listingController.getAllListings)
   .post(listingController.createListing);
 
-router.route("/:id").get(listingController.getListing);
+router
+  .route("/:id")
+  .get(listingController.getListing)
+  .patch(listingController.updateListing);
 
 module.exports = router;

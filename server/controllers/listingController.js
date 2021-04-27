@@ -36,3 +36,15 @@ exports.getListing = async (req, res) => {
     res.status(404).json({ status: "fail", message: "Failed to get Listing" });
   }
 };
+
+exports.updateListing = async (req, res) => {
+  try {
+    const listing = await Listing.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({ status: "success", data: { listing } });
+  } catch (err) {
+    res.status(400).json({ status: "fail", message: "Failed to get Listing" });
+  }
+};
