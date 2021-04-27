@@ -2,7 +2,16 @@ const Listing = require("./../models/listingModel");
 const express = require("express");
 
 exports.getAllListings = async (req, res) => {
-  res.status(200).json({ message: "Get All Listings EP" });
+  try {
+    const listings = await Listing.find();
+    res.status(200).json({
+      status: "success",
+      results: listings.length,
+      data: { listings },
+    });
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: "Failed to get listings" });
+  }
 };
 
 exports.createListing = async (req, res) => {
