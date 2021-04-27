@@ -37,6 +37,20 @@ exports.getAllListings = async (req, res) => {
       query = query.select("-__v");
     }
 
+    // 4) Pagination
+    // page=2&limit=10 ==> 1-10 -> page 1, 11-20 -> page 2, etc...
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 20;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    // check if page is out of data range:
+    if (req.query.page) {
+      const numListings = await Listing.countDocuments();
+      if (skip >= numListings) throw new Error("this page does not exist");
+    }
+
     // EXECUTE QUERY
     const listings = await query;
 
@@ -47,7 +61,7 @@ exports.getAllListings = async (req, res) => {
       data: { listings },
     });
   } catch (err) {
-    res.status(404).json({ status: "fail", message: "Failed to get listings" });
+    res.status(404).json({ status: "fail", message: err });
   }
 };
 
